@@ -1,0 +1,25 @@
+body,html{width:100%;height:100%}
+body{background:#F2F2F2;font-size:28rpx;font-family:'Source Han Sans','Helvetica Neue',Arial,sans-serif;}
+a,a:hover,a:link,a:visited{outline:0;text-decoration:none;cursor:pointer}
+li,ul{list-style:none}
+article,aside,blockquote,body,button,dd,details,div,dl,dt,fieldset,figcaption,figure,footer,form,h1,h2,h3,h4,h5,h6,header,hgroup,hr,input,legend,li,menu,nav,ol,p,section,td,textarea,th,ul{margin:0;padding:0}
+[class^="ren-icon-"], [class*=" ren-icon-"] {font-family:"iconfont" !important;font-size:25px;font-style:normal;-webkit-font-smoothing: antialiased;-moz-osx-font-smoothing: grayscale;}
+.u-text-center{text-align:center!important}
+.u-text-left{text-align:left!important}
+.u-text-right{text-align:right!important}
+
+.u-clearfix{clear:both}
+.u-clearfix:after{content:'\20';clear:both;display:block;height:0}
+
+.c-text-center{text-align: center;}
+.c-flex-center {display: flex;align-items: center;justify-content: center;flex-direction: column;}
+.c-flex-between {display: flex;align-items: center;justify-content: space-between;}
+.c-flex-align {display: flex;align-items: center;}
+.c-flex-start{display: flex;align-items: flex-start;}
+
+.ellipsis{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ellipsis-2{text-overflow:ellipsis;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
+.ellipsis-3{text-overflow:ellipsis;overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;}
+.ellipsis-4{text-overflow:ellipsis;overflow:hidden;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;}
+
+.pagination{margin-top: 20px;}
