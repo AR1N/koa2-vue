@@ -4,11 +4,9 @@ const cors = require('koa2-cors')
 const jwt = require('koa-jwt')
 const verifyAuth = require('./src/utils/authHeader')
 const config = require('./config')
-const {CommonRoute,Route} = require('./src/routes')
+const {CommonRoute, Route} = require('./src/routes')
 
 const app = new Koa()
-
-
 
 
 app.use(cors({
@@ -19,55 +17,69 @@ app.use(cors({
     maxAge: 5,
     credentials: true,
     allowMethods: ['GET', 'POST', 'DELETE', 'OPTIONS', 'PUT'],
-    allowHeaders: ['Content-Type', 'Authorization', 'Accept','CLIENT-TYPE','USER-TOKEN']
+    allowHeaders: ['Content-Type', 'Authorization', 'Accept', 'CLIENT-TYPE', 'USER-TOKEN']
 }));
 
 
-app.use(koabody({multipart:true}))
+app.use(koabody({multipart: true}))
 
 
 //无需token路由
 app.use(CommonRoute.routes()).use(CommonRoute.allowedMethods());
 //token验证中间件
-app.use(async (ctx,next) => {
+app.use(async (ctx, next) => {
     const token = ctx.headers.authorization;
-    if(!token){
+    if (!token) {
         ctx.body = {
             code: 402,
             msg: '缺少令牌'
         }
-    }else{
-      verifyAuth.verify(token).then(res=>{
-        ctx.state = {//请求的用户id即为ctx.user.state.id
-            data:res
-        };
-      })
-        await next()
+    } else {
+        await verifyAuth.verify(token).then(res => {
+            ctx.state = {//请求的用户id即为ctx.state.user.id
+                data: res
+            };
+        }).catch(err => {
+            // ctx.status = 401
+            console.log(err)
+        })
     }
+    await next()
+
 })
-//统一错误处理
-app.use(async(ctx, next)=>{
-    return next().catch((err) => {
-        if(err.status == 401){
-            ctx.body = {
-                code:err.status,
-                msg:'令牌无效'
-            }
-            return
-        }
-        ctx.body = {
-            status:err.status,
-            msg:err
-        }
-    });
-});
-app.use(jwt({ secret: config.jwtKey }));
+
+
+app.use(jwt({secret: config.jwtKey}));
 // 需token路由
 app.use(Route.routes()).use(Route.allowedMethods());
 
+app.use(async (ctx, next) =>{
+    return next().catch((err) => {//统一错误处理
+        if (err.status == 401) {
+            ctx.body = {
+                code: err.status,
+                msg: '无效令牌',
+                data: err,
+                req: ctx.request
+            }
+        } else {
+            ctx.body = {
+                code: 500,
+                msg: '服务器错误：' + err
+            }
+        }
 
+    });
+})
+app.on('error', function(err, ctx){
+    console.log('server error', err);
+});
 
-app.listen(3000,()=>{
+process.on('unhandledRejection', (reason, p) => {
+    console.log('Unhandled Rejection at:', p, 'reason:', reason);
+});
+
+app.listen(3000, () => {
     console.info('koa服务已启动~')
 })
 

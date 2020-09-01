@@ -2,7 +2,8 @@ const jwt = require('jsonwebtoken')
 const config = require('../../config')
 const userDB = require('../database/models/user')
 const argon2 = require('argon2')
-
+const fs = require('fs')
+const path = require('path')
 
 const Common = { 
    async register(ctx){
@@ -64,10 +65,33 @@ const Common = {
                 id:userData.id,
                 account:userData.account,
                 username:userData.username,
-                token: jwt.sign({ id: userData.id }, config.jwtKey,{ expiresIn: '12h',issuer:'Aren'})
+                token: jwt.sign({ id: userData.id }, config.jwtKey,{ expiresIn: '12h',issuer:'Aren'} )
             },
            msg:'登录成功'
         }
+    },
+    async uploadFile(ctx){
+        const file = ctx.request.files.file
+        const reader = fs.createReadStream(file.path);
+        let filePath = path.join(__dirname, '../../public/upload/') + `/${file.name}`;
+        // 创建可写流
+        const upStream = fs.createWriteStream(filePath);
+        // 可读流通过管道写入可写流
+        reader.pipe(upStream);
+        reader.on('end',()=>{
+             ctx.body = {
+                code:1,
+                msg:"上传成功！",
+                data:'操作者id:'+ctx.state.user.id
+            };
+        })
+        // reader.on('err', function(err){
+        //     ctx.body = {
+        //         code:0,
+        //         msg:"上传失败！",
+        //         data:err
+        //     };
+        // })
     }
 
 }

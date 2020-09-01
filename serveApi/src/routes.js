@@ -6,6 +6,9 @@ const Common = require('./controllers/common')
 CommonRoute.post('/common/add',Common.register)
 CommonRoute.post('/common/login',Common.login)
 
+//上传
+Route.post('/common/uploadFile',Common.uploadFile)
+
 
 
 const user = require('./controllers/user')

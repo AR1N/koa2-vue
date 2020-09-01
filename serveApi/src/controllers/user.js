@@ -119,6 +119,7 @@ const user = {
                 data: err
             }
         })
+        // await next()
     },
     async userList(ctx) {
         const query = ctx.query
