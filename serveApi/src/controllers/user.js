@@ -84,18 +84,17 @@ const user = {
                 id: data.id
             }
         }).then(res => {
-            if (res == 1) {
+            if(res==1){
                 ctx.body = {
                     code: 1,
                     msg: '操作成功',
                     data: res
                 }
-            }
-        }).catch(err => {
-            ctx.body = {
-                code: 0,
-                msg: '操作失败',
-                data: err
+            }else {
+                ctx.body = {
+                    code: 0,
+                    msg: '操作失败'
+                }
             }
         })
     },
@@ -111,12 +110,6 @@ const user = {
                 code: 1,
                 msg: '获取成功',
                 data:res
-            }
-        }).catch(err=>{
-            ctx.body = {
-                code: 0,
-                msg: '获取失败',
-                data: err
             }
         })
         // await next()

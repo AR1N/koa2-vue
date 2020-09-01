@@ -81,17 +81,17 @@ const Common = {
         reader.on('end',()=>{
              ctx.body = {
                 code:1,
-                msg:"上传成功！",
-                data:'操作者id:'+ctx.state.user.id
+                msg:"上传成功！"
             };
         })
-        // reader.on('err', function(err){
-        //     ctx.body = {
-        //         code:0,
-        //         msg:"上传失败！",
-        //         data:err
-        //     };
-        // })
+
+        reader.on('err', function(err){
+             ctx.body = {
+                code:0,
+                msg:"上传失败！",
+                data:err
+            };
+        })
     }
 
 }

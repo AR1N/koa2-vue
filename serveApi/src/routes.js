@@ -7,7 +7,7 @@ CommonRoute.post('/common/add',Common.register)
 CommonRoute.post('/common/login',Common.login)
 
 //上传
-Route.post('/common/uploadFile',Common.uploadFile)
+CommonRoute.post('/common/uploadFile',Common.uploadFile)
 
 
 

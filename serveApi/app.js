@@ -34,27 +34,27 @@ app.use(async (ctx, next) => {
             code: 402,
             msg: '缺少令牌'
         }
-    } else {
-        await verifyAuth.verify(token).then(res => {
-            ctx.state = {//请求的用户id即为ctx.state.user.id
-                data: res
-            };
-        }).catch(err => {
-            // ctx.status = 401
-            console.log(err)
-        })
+        return
     }
+    await verifyAuth.verify(token).then(res => {
+        ctx.state = {//请求的用户id即为ctx.state.user.id
+            data: res
+        };
+    }).catch(err => {
+        // ctx.status = 401
+        ctx.body = {
+            code: 401,
+            msg: '无效令牌',
+            data: 'dd:'+err,
+            req: ctx.request
+        }
+        return
+    })
     await next()
 
 })
-
-
-app.use(jwt({secret: config.jwtKey}));
-// 需token路由
-app.use(Route.routes()).use(Route.allowedMethods());
-
 app.use(async (ctx, next) =>{
-    return next().catch((err) => {//统一错误处理
+    await next().catch((err) => {//统一错误处理
         if (err.status == 401) {
             ctx.body = {
                 code: err.status,
@@ -71,6 +71,12 @@ app.use(async (ctx, next) =>{
 
     });
 })
+
+app.use(jwt({secret: config.jwtKey}));
+// 需token路由
+app.use(Route.routes()).use(Route.allowedMethods());
+
+
 app.on('error', function(err, ctx){
     console.log('server error', err);
 });
