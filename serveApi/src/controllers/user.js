@@ -11,12 +11,22 @@ const user = {
         const account = await userDB.findOne({
             where: {account: data.account}
         })
+        if(data.id){//编辑
+            const id = await userDB.findOne({
+                where: {id: data.id}
+            })
+            if(!id){
+                ctx.body = {
+                    code: 101,
+                    msg: '记录不存在'
+                }
+                return
+            }
 
-        if(data.id){
             if (!data.username || !data.account) {
                 ctx.body = {
                     code: 0,
-                    msg: '缺失参数'
+                    msg: '缺少参数：username||account'
                 }
                 return
             }
@@ -36,15 +46,8 @@ const user = {
                         msg: '操作成功'
                     }
                 }
-            }).catch(err => {
-                ctx.body = {
-                    code: 0,
-                    msg: '操作失败',
-                    data: err,
-                    account:account
-                }
             })
-        }else {
+        }else {//新增
             if (account) {
                 ctx.body = {
                     code: 202,
@@ -60,12 +63,6 @@ const user = {
                 ctx.body = {
                     code: 1,
                     msg: '操作成功'
-                }
-            }).catch(err => {
-                ctx.body = {
-                    code: 0,
-                    msg: '操作失败',
-                    data: err
                 }
             })
         }
@@ -106,10 +103,17 @@ const user = {
             },
             attributes: ['id', 'account', 'username']
         }).then(res=>{
-            ctx.body = {
-                code: 1,
-                msg: '获取成功',
-                data:res
+            if(res){
+                ctx.body = {
+                    code: 1,
+                    msg: '获取成功',
+                    data:res
+                }
+            }else {
+                ctx.body = {
+                    code: 101,
+                    msg: '记录不存在'
+                }
             }
         })
         // await next()

@@ -21,68 +21,103 @@ app.use(cors({
 }));
 
 
-app.use(koabody({multipart: true}))
+app.use(koabody({
+    multipart: true,
+    formidable:{
+        maxFileSize: 15*1024*1024  //设置上传文件大小最大限制，最大500M
+    }
+}))
 
 
+
+app.use(async (ctx, next) =>{
+    try{
+        await next()
+    }catch (err) {
+        const stat = err.status || 500;
+        ctx.status = stat
+        ctx.body = {
+            code:stat,
+            msg:err
+        }
+        ctx.app.emit('error', err, ctx);
+    }
+    // await next().catch((err) => {//统一错误处理
+    //     if (err.status == 401) {
+    //         ctx.body = {
+    //             code: err.status,
+    //             msg: '无效令牌',
+    //             data: err,
+    //             req: ctx.request
+    //         }
+    //     } else {
+    //         ctx.body = {
+    //             code: 500,
+    //             msg: '服务器错误：' + err
+    //         }
+    //     }
+    //
+    // });
+})
+app.on('error', function(err, ctx){
+    console.log('服务器错误：', err);
+    if (err.status == 401) {
+        ctx.body = {
+            code: err.status,
+            msg: '无效令牌',
+            data: err
+        }
+    } else {
+        ctx.status = 200
+        ctx.body = {
+            code: 500,
+            msg: '服务器错误：' + err
+        }
+    }
+});
 //无需token路由
 app.use(CommonRoute.routes()).use(CommonRoute.allowedMethods());
 //token验证中间件
-app.use(async (ctx, next) => {
-    const token = ctx.headers.authorization;
-    if (!token) {
-        ctx.body = {
-            code: 402,
-            msg: '缺少令牌'
-        }
-        return
-    }
-    await verifyAuth.verify(token).then(res => {
-        ctx.state = {//请求的用户id即为ctx.state.user.id
-            data: res
-        };
-    }).catch(err => {
-        // ctx.status = 401
-        ctx.body = {
-            code: 401,
-            msg: '无效令牌',
-            data: 'dd:'+err,
-            req: ctx.request
-        }
-        return
-    })
-    await next()
+// app.use(async (ctx, next) => {
+//     const token = ctx.headers.authorization;
+//     if (!token) {
+//         ctx.body = {
+//             code: 402,
+//             msg: '缺少令牌'
+//         }
+//         return
+//     }
+//     await verifyAuth.verify(token).then(res => {
+//         ctx.state = {//请求的用户id即为ctx.state.user.id
+//             data: res
+//         };
+//     }).catch(err => {
+//         // ctx.status = 401
+//         ctx.body = {
+//             code: 401,
+//             msg: '无效令牌',
+//             data: 'dd:'+err,
+//             req: ctx.request
+//         }
+//
+//     })
+//     await next()
+//
+// })
 
-})
-app.use(async (ctx, next) =>{
-    await next().catch((err) => {//统一错误处理
-        if (err.status == 401) {
-            ctx.body = {
-                code: err.status,
-                msg: '无效令牌',
-                data: err,
-                req: ctx.request
-            }
-        } else {
-            ctx.body = {
-                code: 500,
-                msg: '服务器错误：' + err
-            }
-        }
-
-    });
-})
 
 app.use(jwt({secret: config.jwtKey}));
 // 需token路由
 app.use(Route.routes()).use(Route.allowedMethods());
 
 
-app.on('error', function(err, ctx){
-    console.log('server error', err);
-});
 
 process.on('unhandledRejection', (reason, p) => {
     console.log('Unhandled Rejection at:', p, 'reason:', reason);
+    ctx.body = {
+        code:500,
+        msg:reason
+    }
 });
 
 app.listen(3000, () => {

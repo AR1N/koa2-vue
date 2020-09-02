@@ -59,6 +59,7 @@ const Common = {
             }
             return
         }
+        ctx.state = {user:userData}
         ctx.body= {
             code:1,
             data:{
@@ -70,7 +71,7 @@ const Common = {
            msg:'登录成功'
         }
     },
-    async uploadFile(ctx){
+    async uploadFile(ctx,next){
         const file = ctx.request.files.file
         const reader = fs.createReadStream(file.path);
         let filePath = path.join(__dirname, '../../public/upload/') + `/${file.name}`;
@@ -78,20 +79,26 @@ const Common = {
         const upStream = fs.createWriteStream(filePath);
         // 可读流通过管道写入可写流
         reader.pipe(upStream);
-        reader.on('end',()=>{
-             ctx.body = {
+        let iserr = false
+        reader.on('err', function(err){
+            iserr = true
+        })
+        if(iserr){
+            ctx.body = {
+                code:0,
+                msg:"上传失败！"
+            };
+        }
+      const finish = await reader.on('end',()=>{
+             return true
+        })
+        if(finish){
+            ctx.body = {
                 code:1,
                 msg:"上传成功！"
             };
-        })
-
-        reader.on('err', function(err){
-             ctx.body = {
-                code:0,
-                msg:"上传失败！",
-                data:err
-            };
-        })
+        }
+        await next()
     }
 
 }
