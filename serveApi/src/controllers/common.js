@@ -71,7 +71,7 @@ const Common = {
            msg:'登录成功'
         }
     },
-    async uploadFile(ctx,next){
+    async uploadFile(ctx){
         const file = ctx.request.files.file
         const reader = fs.createReadStream(file.path);
         let filePath = path.join(__dirname, '../../public/upload/') + `/${file.name}`;
@@ -82,6 +82,7 @@ const Common = {
         let iserr = false
         reader.on('err', function(err){
             iserr = true
+            console.log('上传失败')
         })
         if(iserr){
             ctx.body = {
@@ -98,7 +99,7 @@ const Common = {
                 msg:"上传成功！"
             };
         }
-        await next()
+
     }
 
 }

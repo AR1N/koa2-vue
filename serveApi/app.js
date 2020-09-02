@@ -42,25 +42,10 @@ app.use(async (ctx, next) =>{
         }
         ctx.app.emit('error', err, ctx);
     }
-    // await next().catch((err) => {//统一错误处理
-    //     if (err.status == 401) {
-    //         ctx.body = {
-    //             code: err.status,
-    //             msg: '无效令牌',
-    //             data: err,
-    //             req: ctx.request
-    //         }
-    //     } else {
-    //         ctx.body = {
-    //             code: 500,
-    //             msg: '服务器错误：' + err
-    //         }
-    //     }
-    //
-    // });
 })
 app.on('error', function(err, ctx){
     console.log('服务器错误：', err);
+    // console.log('ctx:'+JSON.stringify(ctx))
     if (err.status == 401) {
         ctx.body = {
             code: err.status,
@@ -105,7 +90,6 @@ app.use(CommonRoute.routes()).use(CommonRoute.allowedMethods());
 //
 // })
 
-
 app.use(jwt({secret: config.jwtKey}));
 // 需token路由
 app.use(Route.routes()).use(Route.allowedMethods());
@@ -114,10 +98,6 @@ app.use(Route.routes()).use(Route.allowedMethods());
 
 process.on('unhandledRejection', (reason, p) => {
     console.log('Unhandled Rejection at:', p, 'reason:', reason);
-    ctx.body = {
-        code:500,
-        msg:reason
-    }
 });
 
 app.listen(3000, () => {
