@@ -33,13 +33,7 @@ app.use(async (ctx, next) => {
     try {
         await next()
     } catch (err) {
-        if (err.startsWith('maxFileSize exceeded')) {
-            ctx.status = 406
-            ctx.body = {
-                code: 406,
-                msg: '上传文件过大'
-            }
-        }
+         ctx.response.status = err.statusCode || err.status || 500;
         ctx.app.emit('error', err, ctx);
     }
 })
