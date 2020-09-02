@@ -71,35 +71,46 @@ const Common = {
            msg:'登录成功'
         }
     },
-    async uploadFile(ctx){
+    async uploadFile(ctx,next){
         const file = ctx.request.files.file
         const reader = fs.createReadStream(file.path);
         let filePath = path.join(__dirname, '../../public/upload/') + `/${file.name}`;
         // 创建可写流
         const upStream = fs.createWriteStream(filePath);
         // 可读流通过管道写入可写流
-        reader.pipe(upStream);
-        let iserr = false
-        reader.on('err', function(err){
-            iserr = true
-            console.log('上传失败')
-        })
-        if(iserr){
-            ctx.body = {
-                code:0,
-                msg:"上传失败！"
-            };
-        }
-      const finish = await reader.on('end',()=>{
-             return true
-        })
-        if(finish){
+        const fileData = await reader.pipe(upStream);
+        if(fileData){
             ctx.body = {
                 code:1,
                 msg:"上传成功！"
             };
         }
 
+        // let iserr = false
+      //   reader.on('err', function(err){
+      //       iserr = true
+      //       console.log('上传失败')
+      //   })
+      //   if(iserr){
+      //       ctx.body = {
+      //           code:0,
+      //           msg:"上传失败！"
+      //       };
+      //   }
+      // const finish = await reader.on('end',()=>{
+      //        return true
+      //   })
+      //   if(finish){
+      //       ctx.body = {
+      //           code:1,
+      //           msg:"上传成功！"
+      //       };
+      //   }
+      //   try {
+      //       await next()
+      //   }catch (err) {
+      //       console.log('上传错误：'+err)
+      //   }
     }
 
 }

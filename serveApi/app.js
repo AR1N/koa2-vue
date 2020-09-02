@@ -23,38 +23,44 @@ app.use(cors({
 
 app.use(koabody({
     multipart: true,
-    formidable:{
-        maxFileSize: 15*1024*1024  //设置上传文件大小最大限制，最大500M
+    formidable: {
+        maxFileSize: 15 * 1024 * 1024  //设置上传文件大小最大限制，最大500M
     }
 }))
 
 
-
-app.use(async (ctx, next) =>{
-    try{
+app.use(async (ctx, next) => {
+    try {
         await next()
-    }catch (err) {
-        const stat = err.status || 500;
-        ctx.status = stat
-        ctx.body = {
-            code:stat,
-            msg:err
+    } catch (err) {
+        if (err.startsWith('maxFileSize exceeded')) {
+            ctx.status = 406
+            ctx.body = {
+                code: 406,
+                msg: '上传文件过大'
+            }
         }
         ctx.app.emit('error', err, ctx);
     }
 })
-app.on('error', function(err, ctx){
-    console.log('服务器错误：', err);
-    // console.log('ctx:'+JSON.stringify(ctx))
+app.on('error', function (err, ctx) {
     if (err.status == 401) {
         ctx.body = {
             code: err.status,
             msg: '无效令牌',
             data: err
         }
-    } else {
-        ctx.status = 200
+    } else if (err.message.startsWith('maxFileSize exceeded')) {
+        console.log('上传文件过大')
+        ctx.status = 406
+        ctx.message = '上传文件过大'
         ctx.body = {
+            code: 406,
+            msg: '上传文件过大'
+        }
+    } else {
+        console.log('服务器错误：', err);
+        ctx.response.body = {
             code: 500,
             msg: '服务器错误：' + err
         }
@@ -93,7 +99,6 @@ app.use(CommonRoute.routes()).use(CommonRoute.allowedMethods());
 app.use(jwt({secret: config.jwtKey}));
 // 需token路由
 app.use(Route.routes()).use(Route.allowedMethods());
-
 
 
 process.on('unhandledRejection', (reason, p) => {
