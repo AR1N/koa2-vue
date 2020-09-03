@@ -8,7 +8,7 @@ const {CommonRoute, Route} = require('./src/routes')
 
 const app = new Koa()
 
-app.use(async (ctx, next) => {
+app.use(async (ctx, next) => {//统一捕获错误
     let status = 0
     let errMsg = '发生未知错误'
     try {
@@ -28,7 +28,7 @@ app.use(async (ctx, next) => {
             errMsg = '无效令牌'
         }
     }
-    ctx.response.status = status
+    ctx.response.status = 200
     if(status >= 400){
         ctx.body = {
             code:status,
