@@ -22,7 +22,7 @@
       };
     },
     mounted() {
-         console.log(apiUrl)
+
     },
     methods: {
       handleRemove(file, fileList) {

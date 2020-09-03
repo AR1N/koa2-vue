@@ -1,13 +1,38 @@
 const userDB = require('../database/models/user')
 const argon2 = require('argon2')
 const sequelize = require('sequelize')
+const config = require('../../config')
+const secret = require('../utils/crypto')
 const  Op = sequelize.Op
 
 const user = {
+    async userProfile(ctx){
+        const userId = ctx.state.user.id
+        await userDB.findOne({
+            where:{
+                id:userId
+            },
+            attributes: ['id', 'account', 'username']
+        }).then(res=>{
+            if(res){
+                ctx.body = {
+                    code: 1,
+                    msg: '获取成功',
+                    data:res
+                }
+            }else {
+                ctx.body = {
+                    code: 101,
+                    msg: '记录不存在'
+                }
+            }
+        })
+    },
     async userEdit(ctx) {
         let data = ctx.request.body
         let pwd = data.password || '123456'
-        let secretPWD = await argon2.hash(pwd)//密码加密
+        // let secretPWD = await argon2.hash(pwd)//密码加密
+        let secretPWD = secret.Encrypt(pwd,config.aes.key,config.aes.iv)
         const account = await userDB.findOne({
             where: {account: data.account}
         })

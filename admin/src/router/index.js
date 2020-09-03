@@ -121,6 +121,15 @@ router.beforeEach((to, from, next) => {
             next({ name: "home" });
             NProgress.done();
         } else {
+            const userInfo = Store.getters.user_info
+            if(!userInfo){
+                Store.dispatch('getUserProfile').catch(()=>{
+                    Store.dispatch('handleLogout');
+                })
+            }else{
+                next();
+            }
+            next();
             // const permissionData = Store.getters.user_permission;
             // if(permissionData.length == 0){
             //     Store.dispatch('getUserPermission').then(res=>{
@@ -131,7 +140,7 @@ router.beforeEach((to, from, next) => {
             //         NProgress.done();
             //     })
             // }else{
-            next();
+            // next();
             // }
         }
     } else {

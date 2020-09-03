@@ -2,6 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 import Router from "@/router";
 import Config from "../config";
+import secret from '@/util/crypto';
 import userApi from '../api/modules/user'
 
 Vue.use(Vuex);
@@ -32,9 +33,10 @@ export default new Vuex.Store({
 	actions: {
         handleLogin({commit},form){
             return new Promise((resolve,reject)=>{
+                const pwd = secret.Encrypt(form.password,Config.aes.key,Config.aes.iv)
                 let data = {
                     account:form.account,
-                    password:form.password
+                    password:pwd
                 }
                 userApi.login(data).then(res=>{
                     if(res.code==1){
@@ -45,6 +47,18 @@ export default new Vuex.Store({
                     }
                 }).catch(err=>{
                     reject(err)
+                })
+            })
+        },
+        getUserProfile({commit}){
+            return new Promise((resolve,reject)=>{
+                userApi.userProfile().then(res=>{
+                    if(res.code==1){
+                        commit('setUserInfo',res.data);
+                        resolve(res.data)
+                    }else{
+                        reject(res.msg)
+                    }
                 })
             })
         },

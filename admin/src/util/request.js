@@ -50,7 +50,7 @@ http.interceptors.response.use(function(response) {
             type:'error'
         });
     }
-	return response.data;
+	return data;
 }, function(error) {
     hideLoading();
     if(error.response && error.response.status == 404){

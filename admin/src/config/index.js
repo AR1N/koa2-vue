@@ -8,4 +8,8 @@ export default {
 
     tokenKey:'USER-TOKEN-KEY',
 
+    aes:{
+        key:'qwerdfabcdefghij',
+        iv:'0123456789qwerdf'
+    }
 }

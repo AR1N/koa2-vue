@@ -17,19 +17,20 @@ app.use(async (ctx, next) => {//统一捕获错误
     } catch (err) {
         console.log(err)
         status =  err.statusCode || err.status || 500
-        if(err.message){
-            errMsg = err.message
+        errMsg = err.message || err
+        if(status == 401){
+            errMsg = '无效令牌'
         }
         if (err.message.startsWith('maxFileSize exceeded')){
             status = 406
             errMsg = '上传文件过大'
         }
-        if(status == 401){
-            errMsg = '无效令牌'
-        }
     }
     ctx.response.status = 200
     if(status >= 400){
+        if(status == 405){
+            errMsg = 'Method Not Allowed'
+        }
         ctx.body = {
             code:status,
             msg:errMsg

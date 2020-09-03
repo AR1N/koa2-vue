@@ -8,6 +8,10 @@ const user = {
     login(data){
         return post('/common/login',data)
     },
+    //当前用户信息
+    userProfile(){
+        return get('/user/profile')
+    },
     //新增
     // addUser(data){
     //     return post('/user/add',data)

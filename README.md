@@ -12,7 +12,7 @@
 * `koa-router`
 * `mysql=>ORM(sequelize)`
 * `jsonwebtoken`
-* `argon2`加密
+* `crypto-js`加密
 
 ### 起步
 > * 搭建一个简单的koa服务
@@ -232,6 +232,9 @@
         }
         ctx.response.status = 200
         if(status >= 400){
+            if(status == 405){
+            errMsg = 'Method Not Allowed'
+           }
             ctx.body = {
                 code:status,
                 msg:errMsg

@@ -12,6 +12,7 @@ CommonRoute.post('/common/uploadFile',Common.uploadFile)
 
 
 const user = require('./controllers/user')
+ProtectedRoute.get('/user/profile',user.userProfile)
 ProtectedRoute.post('/user/del',user.userDel)
 ProtectedRoute.post('/user/edit',user.userEdit)
 ProtectedRoute.get('/user/item',user.userItem)

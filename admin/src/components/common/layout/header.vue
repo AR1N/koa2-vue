@@ -15,7 +15,7 @@
             <el-dropdown @command="handleCommand">
                 <div class="user c-flex-align">
                     <img src="../../../static/img/author.png" alt="头像" />
-                    <div>您好，管理员</div>
+                    <div>您好，{{username}}</div>
                 </div>
                 <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item icon="el-icon-key" command="editPWD">修改密码</el-dropdown-item>
@@ -76,6 +76,7 @@ export default {
     data() {
         return {
             appName:'',
+            usernameL:'',
             drawerShow: false,
             isFull: false,
             tipTitle: "全屏显示",
@@ -91,6 +92,8 @@ export default {
     },
     created() {
         this.appName = Config.appName;
+        this.username = this.$store.getters.user_info.username
+        console.log(this.$store.getters.user_info)
         let setting = localStorage.getItem("userSetting");
         if (setting) {
             this.setting = JSON.parse(setting);
@@ -201,9 +204,11 @@ export default {
             cursor: pointer;
         }
         .user {
-            color: #3296fa;
+            color: #fff;
             font-size: 14px;
+            font-weight: bold;
             cursor: pointer;
+            text-shadow: 1px 2px 3px#409eff;
             img {
                 height: 48px;
                 width: 48px;

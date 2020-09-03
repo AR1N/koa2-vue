@@ -1,6 +1,10 @@
 
 const config = {
      jwtKey : 'AREN_KEY',
+     aes:{
+         key:'qwerdfabcdefghij',
+         iv:'0123456789qwerdf'
+     },
      sql:{
         host: 'localhost', //主机名
         database: 'node_demo', //数据库名

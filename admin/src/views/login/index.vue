@@ -40,6 +40,7 @@
 <script>
 import Config from "@/config/index";
 import animaCanvas from "@/util/animaCanvas";
+
 export default {
     data() {
         return {

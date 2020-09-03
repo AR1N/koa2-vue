@@ -1,7 +1,8 @@
 const jwt = require('jsonwebtoken')
-const config = require('../../config')
 const userDB = require('../database/models/user')
-const argon2 = require('argon2')
+// const argon2 = require('argon2')
+const config = require('../../config')
+const secret = require('../utils/crypto')
 const fs = require('fs')
 const path = require('path')
 
@@ -19,7 +20,8 @@ const Common = {
             return
         }
         let pwd = data.password || '123456'
-       let secretPWD = await argon2.hash(pwd)//密码加密
+       // let secretPWD = await argon2.hash(pwd)//密码加密
+       let secretPWD = secret.Encrypt(pwd,config.aes.key,config.aes.iv)
        await userDB.create({
            username:data.username,
            account:data.account,
@@ -51,8 +53,17 @@ const Common = {
              }
              return
          }
-        const verify = await argon2.verify(userData.password,user.password)
-        if(!verify){
+        // const verify = await argon2.verify(userData.password,user.password)
+        // if(!verify){
+        //     ctx.body = {
+        //         code:203,
+        //         msg:'密码错误'
+        //     }
+        //     return
+        // }
+        const sendPWD = secret.Decrypt(user.password,config.aes.key,config.aes.iv)
+        const dbPWD = secret.Decrypt(userData.password,config.aes.key,config.aes.iv)
+        if(sendPWD != dbPWD){
             ctx.body = {
                 code:203,
                 msg:'密码错误'
