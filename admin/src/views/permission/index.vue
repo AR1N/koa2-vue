@@ -1,11 +1,15 @@
 <template>
     <div>
-    role
+        <uploadFile></uploadFile>
     </div>
 </template>
 
 <script>
+import uploadFile from '@/components/common/upload'
     export default {
+        components:{
+            uploadFile
+        },
         data () {
              return {}
         }

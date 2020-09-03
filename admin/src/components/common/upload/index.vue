@@ -1,7 +1,7 @@
 <template>
 <el-upload
   class="upload-demo"
-  action="https://jsonplaceholder.typicode.com/posts/"
+  :action="action"
   :on-preview="handlePreview"
   :on-remove="handleRemove"
   :file-list="fileList"
@@ -13,11 +13,16 @@
 
 
 <script>
+    import {apiUrl} from '@/util/helper'
   export default {
     data() {
       return {
+          action:apiUrl+'/common/uploadFile',
         fileList: [{name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}, {name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}]
       };
+    },
+    mounted() {
+         console.log(apiUrl)
     },
     methods: {
       handleRemove(file, fileList) {

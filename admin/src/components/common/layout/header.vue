@@ -148,6 +148,7 @@ export default {
                             });
                         }
                     })
+                }).catch(()=>{
                 })
             }
         },
