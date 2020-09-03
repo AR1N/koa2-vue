@@ -4,7 +4,7 @@ const cors = require('koa2-cors')
 const jwt = require('koa-jwt')
 const verifyAuth = require('./src/utils/authHeader')
 const config = require('./config')
-const {CommonRoute, Route} = require('./src/routes')
+const {CommonRoute, ProtectedRoute} = require('./src/routes')
 
 const app = new Koa()
 
@@ -88,7 +88,7 @@ app.use(CommonRoute.routes()).use(CommonRoute.allowedMethods());
 
 app.use(jwt({secret: config.jwtKey}));
 // 需token路由
-app.use(Route.routes()).use(Route.allowedMethods());
+app.use(ProtectedRoute.routes()).use(ProtectedRoute.allowedMethods());
 
 
 process.on('unhandledRejection', (reason, p) => {

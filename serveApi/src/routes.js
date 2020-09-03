@@ -1,6 +1,6 @@
 const Router = require('koa-router')
 const CommonRoute = new Router()//通用接口
-const Route = new Router()//需权限接口
+const ProtectedRoute = new Router()//需权限接口
 
 const Common = require('./controllers/common')
 CommonRoute.post('/common/add',Common.register)
@@ -12,13 +12,13 @@ CommonRoute.post('/common/uploadFile',Common.uploadFile)
 
 
 const user = require('./controllers/user')
-Route.post('/user/del',user.userDel)
-Route.post('/user/edit',user.userEdit)
-Route.get('/user/item',user.userItem)
-Route.get('/user/list',user.userList)
-Route.post('/user/modifyPWD',user.modifyPWD)
+ProtectedRoute.post('/user/del',user.userDel)
+ProtectedRoute.post('/user/edit',user.userEdit)
+ProtectedRoute.get('/user/item',user.userItem)
+ProtectedRoute.get('/user/list',user.userList)
+ProtectedRoute.post('/user/modifyPWD',user.modifyPWD)
 
 
 
 
-module.exports = {CommonRoute,Route}
+module.exports = {CommonRoute,ProtectedRoute}
