@@ -1,5 +1,11 @@
 # admin
 
+
+<!-- todo -->
+* sentry错误监控
+* Jenkins部署
+
+
 ## Project setup
 ```
 npm install
