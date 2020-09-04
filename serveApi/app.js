@@ -38,16 +38,16 @@ app.use(async (ctx, next) => {//统一捕获错误
     }
 })
 
-app.use(cors({
-    origin: function (ctx) {
-        return 'http://localhost:8080'; // 只允许 http://localhost:8080 这个域名的请求
-    },
-    exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'],
-    maxAge: 5,
-    credentials: true,
-    allowMethods: ['GET', 'POST', 'DELETE', 'OPTIONS', 'PUT'],
-    allowHeaders: ['Content-Type', 'Authorization', 'Accept', 'CLIENT-TYPE', 'USER-TOKEN']
-}));
+// app.use(cors({
+// //     origin: function (ctx) {
+// //         return 'http://localhost:8080'; // 允许 http://localhost:8080 这个域名的请求
+// //     },
+// //     exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'],
+// //     maxAge: 5,
+// //     credentials: true,
+// //     allowMethods: ['GET', 'POST', 'DELETE', 'OPTIONS', 'PUT'],
+// //     allowHeaders: ['Content-Type', 'Authorization', 'Accept', 'CLIENT-TYPE', 'USER-TOKEN']
+// // }));
 
 
 app.use(koabody({

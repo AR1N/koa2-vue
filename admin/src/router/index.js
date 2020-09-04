@@ -29,31 +29,31 @@ const routes = [
                 },
                 component: resolve => require(["@/views/home/index"], resolve) //懒加载路由
             },
-            {
-                path: "/test",
-                name: "test",
-                // component: Layout,
-                redirect: "/test/index",
-                meta: {
-                    title: "测试"
-                },
-                children: [
-                    {
-                        path: "index",
-                        name: "testindex",
-                        meta: {
-                            title: "测试首页"
-                        },
-                        component: resolve =>
-                            require(["@/views/test/index"], resolve)
-                    }
-                ]
-            },
+            // {
+            //     path: "/test",
+            //     name: "test",
+            //     // component: Layout,
+            //     redirect: "/test/index",
+            //     meta: {
+            //         title: "测试"
+            //     },
+            //     children: [
+            //         {
+            //             path: "index",
+            //             name: "testindex",
+            //             meta: {
+            //                 title: "测试首页"
+            //             },
+            //             component: resolve =>
+            //                 require(["@/views/test/index"], resolve)
+            //         }
+            //     ]
+            // },
             {
                 path: "/member",
                 name: "member",
                 meta: {
-                    title: "成员管理"
+                    title: "人员管理"
                 },
                 component: resolve => require(["@/views/member/index"], resolve)
             },
