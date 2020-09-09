@@ -1,6 +1,6 @@
 const Koa = require('koa')
 const koabody = require('koa-body')
-const cors = require('koa2-cors')
+// const cors = require('koa2-cors')
 const jwt = require('koa-jwt')
 const verifyAuth = require('./src/utils/authHeader')
 const config = require('./config')

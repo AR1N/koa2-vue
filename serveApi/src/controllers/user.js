@@ -1,5 +1,5 @@
 const userDB = require('../database/models/user')
-const argon2 = require('argon2')
+// const argon2 = require('argon2')
 const sequelize = require('sequelize')
 const config = require('../../config')
 const secret = require('../utils/crypto')
