@@ -176,7 +176,15 @@ const user = {
     },
     async modifyPWD (ctx){
         let data = ctx.request.body
-        let secretPWD = await argon2.hash(data.password)
+        // let secretPWD = await argon2.hash(data.password)
+        if(!data.password){
+            ctx.body = {
+                code: 0,
+                msg: '请输入密码'
+            }
+            return
+        }
+        let secretPWD = secret.Encrypt(data.password,config.aes.key,config.aes.iv)
         await userDB.update({password: secretPWD}, {
             where: {id: ctx.state.user.id}
         }).then(res=>{

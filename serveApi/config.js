@@ -6,7 +6,8 @@ const config = {
          iv:'0123456789qwerdf'
      },
      sql:{
-        host: '192.168.1.27', //主机名
+        // host: '192.168.1.27', //主机名
+        host: 'localhost', //主机名
         database: 'node_demo', //数据库名
         username: 'root',//账号
         password: 'superadmin',//密码   

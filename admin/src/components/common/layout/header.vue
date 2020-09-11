@@ -140,6 +140,8 @@ export default {
             }
             if(command==='editPWD'){
                 this.$prompt('请输入新密码','提示',{
+                    inputPattern:/[^\s]/,
+                    inputErrorMessage: '请输入密码',
                     confirmButtonText: '确定',
                     cancelButtonText: '取消'
                 }).then(({value})=>{

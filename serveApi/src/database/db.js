@@ -4,7 +4,7 @@ const config = require('../../config')
 
 const sequelize = new Sequelize(config.sql.database, config.sql.username, config.sql.password, {
     host: config.sql.host, //数据库地址
-    port:3307,
+    port:3306,
     dialect: 'mysql', //指定连接的数据库类型
     pool: {
         max: 5, //连接池最大连接数量
